@@ -1,0 +1,5 @@
+requests==2.32.*
+click==8.1.*
+pillow==10.4.0
+functions-framework==3.*
+google-cloud-storage==2.18.2
