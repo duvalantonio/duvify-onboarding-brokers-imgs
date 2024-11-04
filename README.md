@@ -11,9 +11,9 @@ Adicionalmente, tenemos el comando `inserte_nombre_comando` para volver a descar
 
 ## `onboarding_brokers_imgs.py`
 
-Este comando descarga las imagenes, que se encuentran en el directorio `fotos`, desde un bucket, para luego aplicarles la marca de agua y subirlas en otro bucket especifico, siguiendo la misma estructura que el bucket de donde se descargaron, por ejemplo, si:
+Este comando descarga las imagenes, que se encuentran en las carpetas `fotos`, desde un bucket, para luego aplicarles la marca de agua y subirlas en otro bucket especifico, siguiendo la misma estructura que el bucket de donde se descargaron, por ejemplo, si:
 
-- El bucket desde donde se descargan las imagenes tiene la siguiente estructura para un folder:
+- El bucket desde donde se descargan las imagenes tiene la siguiente estructura para una carpeta:
 
     ```bash
     |__edificio-agustinas
@@ -38,7 +38,7 @@ Este comando descarga las imagenes, que se encuentran en el directorio `fotos`, 
                     | ...
     ```
 
-Comunmente la forma en que se utilizara el comando es pasandole el id del bucket donde se encuentran las imagenes originales (`duvify-brokers-fotos-unidades`), la marca de agua del broker para el cual queremos realizar el onboarding de las imagenes, es decir, cargar todas las imagenes con su marca de agua, y subirlas al bucket donde guardamos estas imagenes de brokers (`fotos-unidades-marca-agua`).
+Comunmente la forma en que se utilizara el comando es pasandole el id del bucket donde se encuentran las imagenes originales (`duvify-brokers-fotos-unidades`), el id del bucket donde se subiran las imagenes con la marca de agua del nuevo cliente broker que se integra (`fotos-unidades-marca-agua`) y la marca de agua deseada.
 
 ### Instrucciones
 
