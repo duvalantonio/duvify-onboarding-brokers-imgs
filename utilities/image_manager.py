@@ -91,8 +91,8 @@ class ImageManager:
                             # Returns a compressed image
                             return tools.compress_img(img)
 
-                msg = f'Error applying watermark to the image. Status code: {
-                    r.status_code}. URL: {img_url}'
+                msg = f'Error applying watermark to the image. Status code: {r.status_code}. \
+                    URL: {img_url}'
                 if self.log_mng:
                     self.log_mng.log(msg)
                 print(msg)
