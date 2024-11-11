@@ -43,8 +43,8 @@ class ImageManager:
             if r.status_code == 200:
                 return r.content
 
-            msg = f'Error downloading the image. Status code: {
-                r.status_code}. URL: {img_url}'
+            msg = f'Error downloading the image. Status code: {r.status_code}. \
+                URL: {img_url}'
             if self.log_mng:
                 self.log_mng.log(msg)
             print(msg)
