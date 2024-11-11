@@ -65,6 +65,7 @@ Cada parametro posee una descripcion objetiva de lo que realiza. Aca va un resum
 - `-d`: ID del bucket donde se encuentran las imagenes que queremos descargar, tipicamente sera el bucket `duvify-brokers-fotos-unidades`.
 - `-u`: ID del bucket donde se subiran las imagenes procesadas, tipicamentes sera el bucket `fotos-unidades-marca-agua`.
 - `-k`: Path/archivo que contiene la llave del usuario IAM con los permisos para acceder a los diferentes servicios de firebase storage, esto tipicamente es un archivo json que se descarga desde cloud console, para esto basta con ir a la seccion de IAM & Admin y buscar el usuario `onboarding-broker` para descargar su respetiva llave.
+- `-br`: Nombre del broker para guardar las imagenes en una carpeta con el nombre respectivo.
 
 Estos tres parametros son obligatorios a la hora de ejecutar el comando, los siguientes parametros son opcionales:
 
@@ -86,7 +87,7 @@ Estos tres parametros son obligatorios a la hora de ejecutar el comando, los sig
 La tipica forma en que correras este comando es la siguiente:
 
 ```bash
-> python3 onboarding_brokers_imgs.py -d "duvify-brokers-fotos-unidades" -u "fotos-unidades-marca-agua" -k path/to/the/key/iam/file -w "url.marca-agua-broker.cl"
+> python3 onboarding_brokers_imgs.py -d "duvify-brokers-fotos-unidades" -u "fotos-unidades-marca-agua" -br "nombre-empresa-broker" -k path/to/the/key/iam/file -w "url.marca-agua-broker.cl"
 ```
 
 >[!IMPORTANT]
