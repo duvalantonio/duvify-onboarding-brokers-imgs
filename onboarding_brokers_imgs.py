@@ -26,14 +26,14 @@ def onboarding_brokers_imgs(file, download_bucket, upload_bucket, key, watermark
         download_bucket, upload_bucket, key, img_mng)
 
     click.echo('*******************************************************')
-    click.echo(f'Getting all images public urls from bucket: {
-               download_bucket}')
+    click.echo(f'Getting all images public urls from bucket: \
+               {download_bucket}')
 
     all_imgs_urls = fb_mng.get_all_imgs_public_urls()
 
     click.echo('*******************************************************')
-    click.echo(f'Downloading images from public urls obtained and uploading them to the new bucket: {
-        upload_bucket} ({len(all_imgs_urls)*10} aproximated images)\n\n')
+    click.echo(f'Downloading images from public urls obtained and uploading them to the new bucket: {upload_bucket} \
+                ({len(all_imgs_urls)*10} aproximated images)\n\n')
 
     fb_mng.upload_all_imgs(all_imgs_urls, max_workers=threads)
 
