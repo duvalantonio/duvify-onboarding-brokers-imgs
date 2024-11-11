@@ -40,7 +40,7 @@ class FirebaseUploaderManager:
         Returns:
             str: The public url of the blob.
         """
-
+        blob_name = 'Kind Propiedades/' + blob_name  # TODO: Fix this
         blob = self.upload_bucket.blob(blob_name)
         try:
             blob.upload_from_string(img, content_type='image/jpeg')
@@ -85,8 +85,7 @@ class FirebaseUploaderManager:
             if filename not in folders:
                 folders[filename] = []
 
-            public_url = f'https://firebasestorage.googleapis.com/v0/b/\
-                {self.download_bucket.name}/o/{urllib.parse.quote(blob.name, safe='')}?alt=media'
+            public_url = f'https://firebasestorage.googleapis.com/v0/b/{self.download_bucket.name}/o/{urllib.parse.quote(blob.name, safe='')}?alt=media'
 
             # folders[filename].append(blob.public_url)
             folders[filename].append(public_url)
