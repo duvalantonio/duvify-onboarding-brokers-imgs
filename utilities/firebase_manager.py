@@ -40,7 +40,6 @@ class FirebaseUploaderManager:
         Returns:
             str: The public url of the blob.
         """
-        blob_name = 'Kind Propiedades/' + blob_name  # TODO: Fix this
         blob = self.upload_bucket.blob(blob_name)
         try:
             blob.upload_from_string(img, content_type='image/jpeg')
@@ -85,7 +84,8 @@ class FirebaseUploaderManager:
             if filename not in folders:
                 folders[filename] = []
 
-            public_url = f'https://firebasestorage.googleapis.com/v0/b/{self.download_bucket.name}/o/{urllib.parse.quote(blob.name, safe='')}?alt=media'
+            public_url = f"https://firebasestorage.googleapis.com/v0/b/\
+                {self.download_bucket.name}/o/{urllib.parse.quote(blob.name, safe='')}?alt=media"
 
             # folders[filename].append(blob.public_url)
             folders[filename].append(public_url)
@@ -112,10 +112,10 @@ class FirebaseUploaderManager:
 
         return re.sub(r'fotos\/.*', '', blob_name)
 
-    def upload_all_imgs(self, publics_urls_data: Dict[str, List[str]], max_workers: int = 5) -> None:
+    def upload_all_imgs(self, publics_urls_data: Dict[str, List[str]], broker_name: str, max_workers: int = 5) -> None:
         """
-        Upload all images obtained from `publics_urls_data` to the bucket `self.upload_bucket`.
-        This task is done concurrently.
+        Upload all images obtained from `publics_urls_data` to the bucket `self.upload_bucket` for the
+        broker `broker_name`. This task is done concurrently.
 
         Args:
             publics_urls_data (Dict[str, List[str]]): A dictionary with the public urls of the blobs.
@@ -126,6 +126,7 @@ class FirebaseUploaderManager:
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = []
             for blob_name, public_imgs_url in publics_urls_data.items():
+                blob_name = f'{broker_name}/{blob_name}'
                 futures.append(executor.submit(
                     self._background_imgs_process, blob_name, public_imgs_url))
 
