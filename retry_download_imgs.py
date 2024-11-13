@@ -3,12 +3,13 @@ import re
 from utilities.image_manager import ImageManager
 from utilities.firebase_manager import FirebaseUploaderManager
 
+BUCKET_ID = 'fotos-unidades-marca-agua'  # NO CAMBIAR
+BUCKET_IMGIX = 'duvify-brokers-fotos-unidades'  # NO CAMBIAR
+
 WATERMARK_URL = "URL DE LA MARCA DE AGUA DEL BROKER (DEBE SER PUBLICA)"
 BROKER_NAME = "NOMBRE DEL BROKER (MISMO NOMBRE QUE LA CARPETA EN FIREBASE)"
 LOG_FILENAME = "logs.log"
-BUCKET_ID = 'fotos-unidades-marca-agua'
-BUCKET_IMGIX = 'duvify-brokers-fotos-unidades'
-CREDENTIALS_PATH = "CREDENTIALS DE FIREBASE"
+CREDENTIALS_PATH = "PATH A AL ARCHIVO QUE CONTIENE LAS CREDENCIALES DEL USER IAM"
 
 with open(LOG_FILENAME, "r") as f:
     lines = f.readlines()
