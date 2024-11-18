@@ -5,6 +5,7 @@ import concurrent.futures
 from utilities.image_manager import ImageManager
 from utilities.firebase_manager import FirebaseUploaderManager
 from utilities.log_manager import LogManager
+import utilities.tools
 
 
 @click.command()
@@ -49,7 +50,8 @@ def retry_download_imgs(download_bucket, upload_bucket, key, broker, watermark, 
 
         for future in concurrent.futures.as_completed(futures):
             url: str = future.result()
-            click.echo(f'-- Image uploaded: {url}')
+            click.echo(
+                f'-- Image uploaded: {utilities.tools.replace_domain_url(url)}')
 
     click.echo('*******************************************************')
     click.echo('Task completed!')

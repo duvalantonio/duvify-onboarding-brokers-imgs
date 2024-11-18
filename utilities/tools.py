@@ -1,5 +1,6 @@
 from PIL import Image
 from io import BytesIO
+from urllib.parse import quote
 
 
 def format_name(name: str) -> str:
@@ -50,3 +51,29 @@ def compress_img(img: bytes, quality: int = 20) -> bytes:
         print(f'(compress_img) Error compressing image. {e}')
 
     return compressed_image_bytes
+
+
+def replace_domain_url(url: str) -> str:
+    """Replace the domain url from google cloud to firebase storage, because
+    the domain url for firebase storage has permission to access the images.
+    Ex:
+    https://storage.googleapis.com/fotos-unidades-marca-agua/Kind%20Propiedades/edificio-nueva-cordova/local-105/fotos/nueva-cordova-local-105-01.jpg
+
+    becomes:
+    https://firebasestorage.googleapis.com/v0/b/duvify-brokers-fotos-unidades/o/Kind%2520Propiedades%2Fedificio-nueva-cordova%2Flocal-105%2Ffotos%2Fnueva-cordova-local-105-01.jpg
+
+    Args:
+        url (str): The url to replace the domain.
+
+    Returns:
+        str: The url with the domain replaced (using firebase).
+    """
+
+    url_parts = url.split('/')
+    del url_parts[0:2]
+
+    url_parts[1] = url_parts[1] + '/o/'
+
+    uri = '/'.join(url_parts[2:])
+
+    return 'https://firebasestorage.googleapis.com/v0/b/'+url_parts[1] + quote(uri, safe='%20') + '?alt=media'
