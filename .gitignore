@@ -1,5 +1,7 @@
 # Tex files created from LogManager (Change if you use other type of files)
 *.log
+*.jpg
+test.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
