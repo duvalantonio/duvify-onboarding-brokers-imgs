@@ -4,7 +4,7 @@
   - [`onboarding_brokers_imgs.py`](#onboarding_brokers_imgspy)
     - [Instrucciones](#instrucciones)
     - [Ejemplo de uso](#ejemplo-de-uso)
-  - [`retry_dowload_imgs.py`](#retry_dowload_imgspy)
+  - [`retry_download_imgs.py`](#retry_download_imgspy)
 
 Este proyecto contiene el codigo fuente para ejecutar el comando encargado de subir las images originales, de todas las propiedades que tiene Duvify, hacia el bucket `fotos-unidades-marca-agua`, con la correspondiente marca de agua del broker nuevo que contrata la plataforma.
 
@@ -98,12 +98,12 @@ La tipica forma en que correras este comando es la siguiente:
 >
 > - Cantidad de threads que se asignen. El posterior procesamiento con el cual se aplican las marcas de agua se realiza en paralelo, por tanto si se asignan una mayor cantidad de threads (siempre y cuando el PC lo permita), el procesamiento sera mucho mas rapido.
 
-## `retry_dowload_imgs.py`
+## `retry_download_imgs.py`
 
 Este comando se utiliza para volver a intentar a descargar las imagenes en las cuales se hayan producido errores al momento de aplicar la marca de agua, en la practica el uso de este comando sera la siguiente:
 
 ```bash
-> python3 retry_dowload_imgs.py -d "duvify-brokers-fotos-unidades" -u "fotos-unidades-marca-agua" -br "nombre-empresa-broker" -k path/to/the/key/iam/file -w "url.marca-agua-broker.cl" -l path/to/logfile
+> python3 retry_download_imgs.py -d "duvify-brokers-fotos-unidades" -u "fotos-unidades-marca-agua" -br "nombre-empresa-broker" -k path/to/the/key/iam/file -w "url.marca-agua-broker.cl" -l path/to/logfile
 ```
 
 
