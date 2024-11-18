@@ -105,3 +105,7 @@ Este comando se utiliza para volver a intentar a descargar las imagenes en las c
 ```bash
 > python3 retry_dowload_imgs.py -d "duvify-brokers-fotos-unidades" -u "fotos-unidades-marca-agua" -br "nombre-empresa-broker" -k path/to/the/key/iam/file -w "url.marca-agua-broker.cl" -l path/to/logfile
 ```
+
+
+>[!IMPORTANT]
+> El proceso de descarga de las imagenes con la marca de agua aplicada demora un tiempo (dado que descarga archivos), sin embargo el proceso de subida de estas al bucket de firebase es mucho mas rapido dado que se encuentra paralelizado.
