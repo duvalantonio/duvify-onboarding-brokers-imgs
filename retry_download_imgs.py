@@ -26,9 +26,9 @@ def retry_download_imgs(download_bucket, upload_bucket, key, broker, watermark, 
     with open(log_file, "r") as f:
         lines = f.readlines()
         public_urls = list(map(lambda line: re.search(
-            r'https:.*\.jpg', line).group(0), lines))
-        paths = list(map(lambda url: broker + "/" + unquote(url.replace(
-            "https://firebasestorage.googleapis.com/v0/b/duvify-brokers-fotos-unidades/o/", "").replace("?alt=media", "")), public_urls))
+            r'https:.*\.jpg\?alt\=media', line).group(0), lines))
+        paths = list(map(lambda url: broker + "/" + unquote(url).replace(
+            "https://firebasestorage.googleapis.com/v0/b/duvify-brokers-fotos-unidades/o/", "").replace("?alt=media", ""), public_urls))
 
     click.echo('*******************************************************')
     click.echo(
