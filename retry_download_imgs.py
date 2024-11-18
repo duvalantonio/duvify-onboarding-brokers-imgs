@@ -1,6 +1,7 @@
 from urllib.parse import unquote
 import re
 import click
+import concurrent.futures
 from utilities.image_manager import ImageManager
 from utilities.firebase_manager import FirebaseUploaderManager
 from utilities.log_manager import LogManager
@@ -15,7 +16,8 @@ from utilities.log_manager import LogManager
 @click.option('-l', '--log_file', type=click.Path(exists=True, resolve_path=True), required=True, help='Path to the log file to read and retry the download of the images')
 @click.option('-to', '--timeout', type=click.INT, default=10, help='Timeout in seconds for the watermark service responses')
 @click.option('-nt', '--n_tries', type=click.INT, default=1, help='Number of attempts to download the image if an error occurs from the watermark service')
-def retry_download_imgs(download_bucket, upload_bucket, key, broker, watermark, log_file, timeout, n_tries):
+@click.option('-t', '--threads', type=click.INT, default=5, help='Number of threads to use for downloading the images')
+def retry_download_imgs(download_bucket, upload_bucket, key, broker, watermark, log_file, timeout, n_tries, threads):
 
     log_mng = LogManager(filename="retry_logs.log")
     img_mng = ImageManager(timeout=timeout, n_tries=n_tries,
@@ -33,13 +35,21 @@ def retry_download_imgs(download_bucket, upload_bucket, key, broker, watermark, 
     click.echo('*******************************************************')
     click.echo(
         f'Downloading images from public urls ({len(public_urls)} images)\n\n')
+
     imgs = img_mng.download_images(public_urls)
 
     click.echo('*******************************************************')
     click.echo(
         f'Uploading images to the new bucket: {upload_bucket}\n\n')
-    for img, path in zip(imgs, paths):
-        fb_mng._upload_img(path, img)
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
+        futures = []
+        for img, path in zip(imgs, paths):
+            futures.append(executor.submit(fb_mng._upload_img, path, img))
+
+        for future in concurrent.futures.as_completed(futures):
+            url: str = future.result()
+            click.echo(f'-- Image uploaded: {url}')
 
     click.echo('*******************************************************')
     click.echo('Task completed!')
