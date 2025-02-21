@@ -5,6 +5,7 @@ import concurrent.futures
 from typing import Dict, List
 from . import image_manager
 from google.oauth2 import service_account
+from google.cloud.storage.blob import Blob
 import urllib
 
 
@@ -91,6 +92,46 @@ class FirebaseUploaderManager:
             folders[filename].append(public_url)
         return folders
 
+    def get_all_blueprint_imgs_public_urls(self) -> Dict[str, List[str]]:
+        """
+        Get all public urls for blueprint images in the bucket: `self.download_bucket`, grouped by folder.
+        The dictionary has the format:
+        {
+            'folder_path_1': ['url1', 'url2', ...],
+            'folder_path_2': ['url3', 'url4', ...],
+            ...
+        }
+
+        Ex:
+        {"edificio-parque-andino/local-3/planos":
+            ["https://firebasestorage.googleapis.com/v0/b/..."],}
+
+        It has this format so when uploading the blueprint images, we can name the files with the same name as the original,
+        indexing them by the position in the list.
+
+        Returns:
+            Dict[str, List[str]]: A dictionary where the key is the folder path to folder planos and the value is a list of public urls.
+        """
+
+        blobs = self.download_bucket.list_blobs()
+        paths = {}
+        for blob in blobs:
+            if '.DS_Store' in blob.name or 'planos/' not in blob.name:
+                # Ignore all type of files that are not images
+                continue
+
+            path_to_blueprint: str = blob.name
+            path_to_blueprint = "/".join(path_to_blueprint.split('/')[:-1])
+            if path_to_blueprint not in paths:
+                paths[path_to_blueprint] = []
+
+            public_url = f"https://firebasestorage.googleapis.com/v0/b/" +\
+                f"{self.download_bucket.name}/o/{urllib.parse.quote(blob.name, safe='')}?alt=media"
+
+            paths[path_to_blueprint].append(public_url)
+
+        return paths
+
     def _background_imgs_process(self, blob_name: str, public_imgs_url: List[str]) -> str:
         """
         Process a list of images by downloading them from bucket `self.download_bucket`, and
@@ -133,3 +174,28 @@ class FirebaseUploaderManager:
             for future in concurrent.futures.as_completed(futures):
                 folder = future.result()
                 print(f'---- Images uploaded to folder: {folder}')
+
+
+if __name__ == "__main__":
+    from . import image_manager
+
+    img_mng = image_manager.ImageManager()
+    fb_mng = FirebaseUploaderManager(
+        "duvify-brokers-fotos-unidades", "fotos-unidades-marca-agua", "/home/nahuel/Downloads/duvify-brokers-afa85bd75e36.json", img_mng)
+    blobs = fb_mng.download_bucket.list_blobs()
+    paths = {}
+    for blob in blobs:
+        if '.DS_Store' in blob.name or 'planos/' not in blob.name:
+            # Ignore all type of files that are not images
+            continue
+
+        path_to_blueprint: str = blob.name
+        path_to_blueprint = "/".join(path_to_blueprint.split('/')[:-1])
+        if path_to_blueprint not in paths:
+            paths[path_to_blueprint] = []
+
+        public_url = f"https://firebasestorage.googleapis.com/v0/b/" +\
+            f"{fb_mng.download_bucket.name}/o/{urllib.parse.quote(blob.name, safe='')}?alt=media"
+
+        paths[path_to_blueprint].append(public_url)
+        print(paths)

@@ -77,3 +77,19 @@ def replace_domain_url(url: str) -> str:
     uri = '/'.join(url_parts[2:])
 
     return 'https://firebasestorage.googleapis.com/v0/b/'+url_parts[1] + quote(uri, safe='%20') + '?alt=media'
+
+
+def get_file_name_from_url(url: str) -> str:
+    """Return the filename of the resource from a url. This function is used to get the name of the blueprint.
+    Ex: https://firebasestorage.googleapis.com/v0/b/duvify-brokers-fotos-unidades/o/edificio-angular%2Flocal-7%2Fplanos%2Fangular-local-7-plano-ubicacion?alt=media
+
+    returns 'angular-local-7-plano-ubicacion'
+
+    Args:
+        url (str): The url to extract the filename from.
+
+    Returns:
+        str: The filename extracted from the url.
+    """
+    url_parts = url.split('/')
+    return url_parts[-1].split('?')[0].split("%2F")[-1]
