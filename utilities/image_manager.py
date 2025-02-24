@@ -1,4 +1,5 @@
 import requests
+
 from typing import List
 from . import tools, DEFAULT_IMAGE_CONTENT
 from . import log_manager
@@ -69,7 +70,7 @@ class ImageManager:
         """
 
         # Preconfigured watermark settings
-        json = {
+        payload = {
             "mainImageUrl": img_url,
             "markImageUrl": self.watermark_url,
             "opacity": 1.0,
@@ -80,8 +81,8 @@ class ImageManager:
         }
 
         try:
-            r = requests.post(self.WATERMARK_RESOURCE_ENDPOINT,
-                              json=json, timeout=self.TIMEOUT)
+            r = requests.post(self.WATERMARK_RESOURCE_ENDPOINT, json=payload,
+                              timeout=self.TIMEOUT, headers={"Content-Type": "application/json", "User-Agent": "insomnia/9.3.3"})
 
             if r.status_code != 200:
                 if not trying:
@@ -91,8 +92,8 @@ class ImageManager:
                             # Returns a compressed image
                             return tools.compress_img(img)
 
-                msg = f'Error applying watermark to the image. Status code: {r.status_code}. \
-                    URL: {img_url}'
+                msg = f"Error applying watermark to the image, reason: {r.reason}. Status code: {r.status_code}. \
+                    URL: {img_url}"
                 if self.log_mng:
                     self.log_mng.log(msg)
                 print(msg)
@@ -101,7 +102,7 @@ class ImageManager:
             return tools.compress_img(r.content)
 
         except Exception as e:
-            msg = f'{e}. Could not apply watermark to the image. URL: {img_url}'
+            msg = f"{e}. Could not apply watermark to the image. URL: {img_url}"
             print(msg)
             if self.log_mng:
                 self.log_mng.log(msg)
