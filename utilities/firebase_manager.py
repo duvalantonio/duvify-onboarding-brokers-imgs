@@ -175,6 +175,38 @@ class FirebaseUploaderManager:
                 folder = future.result()
                 print(f'---- Images uploaded to folder: {folder}')
 
+    def upload_blueprints_imgs(self, publics_urls: List[str], broker_name: str, path: str) -> None:
+        """
+        Upload all blueprint images obtained from `publics_urls` to the bucket `self.upload_bucket` for the
+        broker `broker_name`. This task is done concurrently.
+
+        Args:
+            publics_urls (List[str]): A list with the public urls of the blobs.
+            broker_name (str): The name of the broker.
+            path (str): The path where the blueprint images will be uploaded.
+        Returns:
+            None
+        """
+        watermark_imgs = self.img_mng.download_images(publics_urls)
+
+        # NOTE: Upload plano ubicacion
+        plano_ubicacion = f"{broker_name}/{path}/plano-ubicacion.jpg"
+        self._upload_img(plano_ubicacion, watermark_imgs[0])
+
+        # NOTE: Upload plano uso
+        plano_uso = f"{broker_name}/{path}/plano-uso.jpg"
+        self._upload_img(plano_uso, watermark_imgs[1])
+
+    def upload_all_blueprints_imgs(self, public_blueprint_urls: Dict[str, List[str]], broker_name: str) -> None:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+            futures = []
+            for path, publics_urls in public_blueprint_urls.items():
+                futures.append(executor.submit(
+                    self.upload_blueprints_imgs, publics_urls, broker_name, path))
+
+            for future in concurrent.futures.as_completed(futures):
+                future.result()
+
 
 if __name__ == "__main__":
     from . import image_manager
