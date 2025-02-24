@@ -8,7 +8,7 @@ from utilities.log_manager import LogManager
 @click.option("-d", "--download_bucket", type=click.STRING, required=True, help="ID of the Firebase Storage bucket where the images to download are located")
 @click.option("-u", "--upload_bucket", type=click.STRING, required=True, help="ID of the Firebase Storage bucket where the images will be uploaded")
 @click.option("-k", "--key", type=click.Path(exists=True, resolve_path=True), required=True, help="Path to the Firebase SDK credentials file")
-@click.option("br", "--broker", type=click.STRING, required=True, help="Name of the broker, used to save the images in a folder with the broker name")
+@click.option("-br", "--broker_name", type=click.STRING, required=True, help="Name of the broker, used to save the images in a folder with the broker name")
 @click.option("-w", "--watermark", type=click.STRING, help="URL of the image that will be used as a watermark")
 @click.option("-f", "--file", type=click.Path(exists=True, resolve_path=True), help="Path to the log file where the logs will be saved (Tip: Use a .log extension, its the default format when the command is executed)")
 @click.option("-t", "--threads", type=click.INT, default=5, help="Number of threads to use for downloading and uploading images")
