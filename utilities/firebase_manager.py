@@ -206,6 +206,8 @@ class FirebaseUploaderManager:
 
             for future in concurrent.futures.as_completed(futures):
                 future.result()
+                print(
+                    f"---- Blueprint images uploaded to folder: {broker_name}/{path}")
 
 
 if __name__ == "__main__":
@@ -216,18 +218,18 @@ if __name__ == "__main__":
         "duvify-brokers-fotos-unidades", "fotos-unidades-marca-agua", "/home/nahuel/Downloads/duvify-brokers-afa85bd75e36.json", img_mng)
     blobs = fb_mng.download_bucket.list_blobs()
     paths = {}
-    for blob in blobs:
-        if '.DS_Store' in blob.name or 'planos/' not in blob.name:
-            # Ignore all type of files that are not images
-            continue
+    # for blob in blobs:
+    #     if '.DS_Store' in blob.name or 'planos/' not in blob.name:
+    #         # Ignore all type of files that are not images
+    #         continue
 
-        path_to_blueprint: str = blob.name
-        path_to_blueprint = "/".join(path_to_blueprint.split('/')[:-1])
-        if path_to_blueprint not in paths:
-            paths[path_to_blueprint] = []
+    #     path_to_blueprint: str = blob.name
+    #     path_to_blueprint = "/".join(path_to_blueprint.split('/')[:-1])
+    #     if path_to_blueprint not in paths:
+    #         paths[path_to_blueprint] = []
 
-        public_url = f"https://firebasestorage.googleapis.com/v0/b/" +\
-            f"{fb_mng.download_bucket.name}/o/{urllib.parse.quote(blob.name, safe='')}?alt=media"
+    #     public_url = f"https://firebasestorage.googleapis.com/v0/b/" +\
+    #         f"{fb_mng.download_bucket.name}/o/{urllib.parse.quote(blob.name, safe='')}?alt=media"
 
-        paths[path_to_blueprint].append(public_url)
-        print(paths)
+    #     paths[path_to_blueprint].append(public_url)
+    #     print(paths)
