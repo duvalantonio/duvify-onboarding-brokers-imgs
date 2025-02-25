@@ -30,21 +30,21 @@ def onboarding_brokers_imgs(file, broker_name, download_bucket, upload_bucket, k
     click.echo(f"Getting all images public urls from bucket: \
                {download_bucket}")
 
-    all_imgs_urls = fb_mng.get_all_imgs_public_urls()
+    # all_imgs_urls = fb_mng.get_all_imgs_public_urls()
+    all_imgs_urls = 0
 
     all_blueprint_urls = fb_mng.get_all_blueprint_imgs_public_urls()
 
     click.echo("*******************************************************")
     click.echo(f"Downloading images from public urls obtained and uploading them to the new bucket: {upload_bucket} \
-                ({len(all_imgs_urls)*10} aproximated images and {len(all_blueprint_urls)*2} blueprint aproximated images)\n\n")
+                ({all_imgs_urls} aproximated images and {len(all_blueprint_urls)*2} blueprint aproximated images)\n\n")
 
-    fb_mng.upload_all_imgs(all_imgs_urls, broker_name, max_workers=threads)
+    # fb_mng.upload_all_imgs(all_imgs_urls, broker_name, max_workers=threads)
 
     click.echo("*******************************************************")
     click.echo("All images uploaded successfully!")
 
-    fb_mng.upload_all_blueprints_imgs(
-        all_blueprint_urls, broker_name, max_workers=threads)
+    fb_mng.upload_all_blueprints_imgs(all_blueprint_urls, broker_name)
 
     click.echo("*******************************************************")
     click.echo("All blueprint images uploaded successfully!")
