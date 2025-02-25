@@ -33,6 +33,9 @@ def onboarding_brokers_imgs(file, broker_name, download_bucket, upload_bucket, k
     # all_imgs_urls = fb_mng.get_all_imgs_public_urls()
     all_imgs_urls = 0
 
+    click.echo(f"Getting all blueprint images from bucket: \
+               {download_bucket}")
+
     all_blueprint_urls = fb_mng.get_all_blueprint_imgs_public_urls()
 
     click.echo("*******************************************************")
