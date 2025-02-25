@@ -76,7 +76,7 @@ class FirebaseUploaderManager:
         blobs = self.download_bucket.list_blobs()
         folders = {}
         for blob in blobs:
-            if blob.name.endswith('/') or '.DS_Store' in blob.name or '0.-antecedentes' in blob.name.lower() or '/' not in blob.name or 'fotos/' not in blob.name:
+            if '.DS_Store' in blob.name or 'fotos/' not in blob.name:
                 # Ignore all type of files that are not images
                 continue
 
