@@ -1,14 +1,43 @@
 # onboarding-brokers-imgs
 
 - [onboarding-brokers-imgs](#onboarding-brokers-imgs)
+  - [Guia de instalacion](#guia-de-instalacion)
+  - [Guia de uso](#guia-de-uso)
   - [`onboarding_brokers_imgs.py`](#onboarding_brokers_imgspy)
     - [Instrucciones](#instrucciones)
-    - [Ejemplo de uso](#ejemplo-de-uso)
   - [`retry_download_imgs.py`](#retry_download_imgspy)
 
 Este proyecto contiene el codigo fuente para ejecutar el comando encargado de subir las images originales, de todas las propiedades que tiene Duvify, hacia el bucket `fotos-unidades-marca-agua`, con la correspondiente marca de agua del broker nuevo que contrata la plataforma.
 
 Adicionalmente, tenemos el comando `inserte_nombre_comando` para volver a descargar ... (En proceso)
+
+## Guia de instalacion
+
+Para instalar el comando basta con descargar el repositorio e instalar los requerimientos de `requirements.txt`, se recomienda el uso de un entorno virtual de python:
+
+```bash
+cd onboarding-brokers-imgs
+python3 -m venv my-venv
+source my-venv/bin/activate
+pip install -r requirements.txt
+```
+
+## Guia de uso
+
+La tipica forma en que correras este comando es la siguiente:
+
+```bash
+python3 onboarding_brokers_imgs.py -d "duvify-brokers-fotos-unidades" -u "fotos-unidades-marca-agua" -br "nombre-empresa-broker" -k path/to/the/key/iam/file -w "url.marca-agua-broker.cl"
+```
+
+Esto descargara las imagenes del bucket `duvify-brokers-fotos-unidades` aplicandoles la marca de agua `url.marca-agua-broker.cl` para guardarlas en la carpeta `nombre-empresa-broker` en el bucket `fotos-unidades-marca-agua`.
+
+>[!IMPORTANT]
+>La duracion de ejecucion del comando depende de varios factores, como lo son:
+>
+> - Cantidad de fotos en el bucket desde donde se obtienes las imagenes originales, esto dado que de aca se recolectan todas las urls de las imagenes.
+>
+> - Cantidad de threads que se asignen. El posterior procesamiento con el cual se aplican las marcas de agua se realiza en paralelo, por tanto si se asignan una mayor cantidad de threads (siempre y cuando el PC lo permita), el procesamiento sera mucho mas rapido.
 
 ## `onboarding_brokers_imgs.py`
 
@@ -82,21 +111,6 @@ Estos tres parametros son obligatorios a la hora de ejecutar el comando, los sig
 
 >[!IMPORTANT]
 >Esto no es la documentacion del comando, por tanto no es una guia total de lo que realiza, si quieres saber en especifico que tipo de dato recibe cada parametro ocupa el parametro `--help`.
-
-### Ejemplo de uso
-
-La tipica forma en que correras este comando es la siguiente:
-
-```bash
-> python3 onboarding_brokers_imgs.py -d "duvify-brokers-fotos-unidades" -u "fotos-unidades-marca-agua" -br "nombre-empresa-broker" -k path/to/the/key/iam/file -w "url.marca-agua-broker.cl"
-```
-
->[!IMPORTANT]
->La duracion de ejecucion del comando depende de varios factores, como lo son:
->
-> - Cantidad de fotos en el bucket desde donde se obtienes las imagenes originales, esto dado que de aca se recolectan todas las urls de las imagenes.
->
-> - Cantidad de threads que se asignen. El posterior procesamiento con el cual se aplican las marcas de agua se realiza en paralelo, por tanto si se asignan una mayor cantidad de threads (siempre y cuando el PC lo permita), el procesamiento sera mucho mas rapido.
 
 ## `retry_download_imgs.py`
 
